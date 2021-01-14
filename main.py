@@ -1,6 +1,8 @@
 import csv
 from datetime import datetime, timedelta
 from math import sqrt
+import pandas as pd
+
 
 filepath = "data.csv"
 
@@ -122,6 +124,45 @@ def get_info(filepath):
 
 
     # посчитать и вывести в CSV-файл продажи, количество продаж и прибыль по каждому продукту
+    di = []
+    res = []
+    for _ in range(1, len(list_of_data)):
+        di.append([list_of_data[_][13], float(list_of_data[_][17].replace(',', '.')), int(list_of_data[_][18].replace(',', '.')), float(list_of_data[_][20].replace(',', '.'))])
+    print(di)
+
+    res.append(di[0])
+    # print(res)
+    for _ in range(1, len(di)):
+        # print(di[_][0])
+        triger = True
+        for i in range(len(res)):
+            # print(res[i][0])
+            if res[i][0] == di[_][0]:
+                triger = False
+                break
+        if triger:
+            res.append(di[_])
+        else:
+            res[i][1] += float(di[_][1])
+            res[i][2] += int(di[_][2])
+            res[i][3] += float(di[_][3])
+    print(res)
+
+    lst1 = [res[_][0] for _ in range(len(res))]
+    lst2 = [res[_][1] for _ in range(len(res))]
+    lst3 = [res[_][2] for _ in range(len(res))]
+    lst4 = [res[_][3] for _ in range(len(res))]
+
+    data = dict(Product_ID=lst1, Sales=lst2, Quantity=lst3, Profit=lst4)
+
+    df = pd.DataFrame(data)
+
+    df.to_csv('res.csv', sep=';', index=False)
+
+
+
+
+
 
 
 
